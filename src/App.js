@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import StockTable from "./StockTable";
+
+// import StockChart from './StockChart';
+
+const StockChart = React.lazy(() =>
+  import(/* webpackChunkName: 'Chart' */ "./StockChart")
+);
+
+// const ChartPromise = import(/* webpackChunkName: 'StockChart' */ "./StockChart");
+// const StockChart = React.lazy(() => ChartPromise);
 
 class App extends Component {
+  state = {
+    selectedStock: null
+  };
   render() {
+    const { stocks } = this.props;
+    const { selectedStock } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <StockTable
+          stocks={stocks}
+          onSelect={selectedStock => this.setState({ selectedStock })}
+        />
+        {/* <div hidden={true}>
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <Chart data={[]} />
+            </React.Suspense>
+          </div> */}
+        {selectedStock && (
+          <StockChart
+            stock={selectedStock}
+            onClose={() => this.setState({ selectedStock: false })}
+          />
+        )}
+      </React.Suspense>
     );
   }
 }
-
 export default App;
