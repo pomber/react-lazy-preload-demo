@@ -4,7 +4,7 @@ import StockTable from "./StockTable";
 // import StockChart from './StockChart';
 
 const StockChart = React.lazy(() =>
-  import(/* webpackChunkName: 'Chart' */ "./StockChart")
+  import(/* webpackChunkName: 'StockChart' */ "./StockChart")
 );
 
 // const ChartPromise = import(/* webpackChunkName: 'StockChart' */ "./StockChart");
