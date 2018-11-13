@@ -4,6 +4,7 @@
   "builds": [{ "src": "package.json", "use": "@now/static-build" }],
   "routes": [
     { "src": "^/static/(.*)", "dest": "/static/$1" },
+    { "src": "/report", "dest": "/report.html" },
     { "src": ".*", "dest": "/index.html" }
   ]
 }
