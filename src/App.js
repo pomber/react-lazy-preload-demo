@@ -1,16 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import StockTable from "./StockTable";
 
-// import StockChart from './StockChart';
+import StockChart from "./StockChart";
 
-const StockChart = React.lazy(() =>
-  import(/* webpackChunkName: 'StockChart' */ "./StockChart")
-);
-
-// const ChartPromise = import(/* webpackChunkName: 'StockChart' */ "./StockChart");
-// const StockChart = React.lazy(() => ChartPromise);
-
-class App extends Component {
+class App extends React.Component {
   state = {
     selectedStock: null
   };
@@ -18,24 +11,20 @@ class App extends Component {
     const { stocks } = this.props;
     const { selectedStock } = this.state;
     return (
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Fragment>
         <StockTable
           stocks={stocks}
           onSelect={selectedStock => this.setState({ selectedStock })}
         />
-        {/* <div hidden={true}>
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <Chart data={[]} />
-            </React.Suspense>
-          </div> */}
         {selectedStock && (
           <StockChart
             stock={selectedStock}
             onClose={() => this.setState({ selectedStock: false })}
           />
         )}
-      </React.Suspense>
+      </React.Fragment>
     );
   }
 }
+
 export default App;
