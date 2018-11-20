@@ -24,6 +24,12 @@ class App extends React.Component {
             onClose={() => this.setState({ selectedStock: false })}
           />
         )}
+        {/* Preload <StockChart/> */}
+        <React.Suspense fallback={null}>
+          <div hidden={true}>
+            <StockChart stock={stocks[0]} />
+          </div>
+        </React.Suspense>
       </React.Suspense>
     );
   }
