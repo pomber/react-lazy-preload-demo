@@ -5,6 +5,10 @@ const StockChart = React.lazy(() =>
   import(/* webpackChunkName: 'StockChart' */ "./StockChart")
 );
 
+function AlwaysSuspend() {
+  throw new Promise(() => {});
+}
+
 class App extends React.Component {
   state = {
     selectedStock: null
@@ -26,9 +30,8 @@ class App extends React.Component {
         )}
         {/* Preload <StockChart/> */}
         <React.Suspense fallback={null}>
-          <div hidden={true}>
-            <StockChart stock={stocks[0]} />
-          </div>
+          <StockChart stock={stocks[0]} />
+          <AlwaysSuspend />
         </React.Suspense>
       </React.Suspense>
     );
