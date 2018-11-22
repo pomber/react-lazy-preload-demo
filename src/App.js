@@ -1,9 +1,8 @@
 import React from "react";
 import StockTable from "./StockTable";
 
-const StockChart = React.lazy(() =>
-  import(/* webpackChunkName: 'StockChart' */ "./StockChart")
-);
+const stockChartPromise = import(/* webpackChunkName: 'StockChart' */ "./StockChart");
+const StockChart = React.lazy(() => stockChartPromise);
 
 class App extends React.Component {
   state = {
