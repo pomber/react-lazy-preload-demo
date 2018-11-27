@@ -1,7 +1,27 @@
 import React from "react";
 import StockTable from "./StockTable";
 
-import StockChart from "./StockChart";
+const StockChart = React.lazy(() =>
+  import(/* webpackChunkName: 'StockChart' */ "./StockChart")
+);
+
+const neverResolve = new Promise(() => {});
+function Suspender({ suspend }) {
+  if (suspend) {
+    throw neverResolve;
+  } else {
+    return null;
+  }
+}
+
+function Preload({ show, children }) {
+  return (
+    <React.Suspense fallback={show ? undefined : null}>
+      {children}
+      <Suspender suspend={!show} />
+    </React.Suspense>
+  );
+}
 
 class App extends React.Component {
   state = {
@@ -11,18 +31,18 @@ class App extends React.Component {
     const { stocks } = this.props;
     const { selectedStock } = this.state;
     return (
-      <React.Fragment>
+      <React.Suspense fallback={<div>Loading...</div>}>
         <StockTable
           stocks={stocks}
           onSelect={selectedStock => this.setState({ selectedStock })}
         />
-        {selectedStock && (
+        <Preload show={selectedStock != null}>
           <StockChart
-            stock={selectedStock}
-            onClose={() => this.setState({ selectedStock: false })}
+            stock={selectedStock || stocks[0]}
+            onClose={() => this.setState({ selectedStock: null })}
           />
-        )}
-      </React.Fragment>
+        </Preload>
+      </React.Suspense>
     );
   }
 }
